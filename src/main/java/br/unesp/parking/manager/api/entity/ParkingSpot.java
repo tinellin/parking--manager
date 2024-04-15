@@ -17,7 +17,6 @@ import java.util.Objects;
 @EntityListeners(AuditingEntityListener.class)
 @Data
 public class ParkingSpot implements Serializable {
-
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,28 +25,21 @@ public class ParkingSpot implements Serializable {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
-    private StatusCarSpace status;
+    private StatusParkingSpot status;
 
-    public enum StatusCarSpace {
+    public enum StatusParkingSpot {
         FREE, OCCUPIED
     }
 
-    /* Representa o sistema de auditoria */
-    @CreatedDate
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TypeParkingSpot type;
 
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @CreatedBy
-    @Column(name = "created_by")
-    private String createdBy;
-
-    @LastModifiedBy
-    @Column(name = "updated_by")
-    private String updatedBy;
+    public enum TypeParkingSpot {
+        REGULAR,
+        PCD,
+        SENIOR
+    }
 
     @Override
     public boolean equals(Object o) {

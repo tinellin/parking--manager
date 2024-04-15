@@ -11,7 +11,7 @@ public class CarInfo {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "license_plate", nullable = false, length = 7)
+    @Column(name = "license_plate", unique = true, nullable = false, length = 7)
     private String licensePlate;
 
     @Column(name = "car_brand", nullable = false, length = 45)
@@ -23,6 +23,21 @@ public class CarInfo {
     @Column(name = "car_color", nullable = false, length = 45)
     private String carColor;
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     @OneToOne(mappedBy = "carInfo")
-    private ClientParkingSpot clientParkingSpot;
+    private CustomerParkingSpot customerParkingSpot;
+
+    @Override
+    public String toString() {
+        return "CarInfo{" +
+                "id=" + id +
+                ", licensePlate='" + licensePlate + '\'' +
+                ", carBrand='" + carBrand + '\'' +
+                ", carModel='" + carModel + '\'' +
+                ", carColor='" + carColor + '\'' +
+                '}';
+    }
 }
