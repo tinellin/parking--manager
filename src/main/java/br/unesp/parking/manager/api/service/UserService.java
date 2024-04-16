@@ -46,7 +46,7 @@ public class UserService {
 
         if(!passwordEncoder.matches(password, user.getPassword())) throw new PasswordInvalidException("Sua senha não confere.");
 
-        user.setPassword(passwordEncoder.encode(password));
+        user.setPassword(passwordEncoder.encode(newPassword));
         return user;
     }
 

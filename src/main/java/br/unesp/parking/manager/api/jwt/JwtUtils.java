@@ -19,7 +19,7 @@ public class JwtUtils {
     public static final String JWT_AUTHORIZATION = "Authorization";
     private static final String SECRET_KEY = "CwFQTbzBFXG82JU4cCYLm5EyfOe7bjBA";
     private static final long EXPIRE_DAYS = 0;
-    private static final long EXPIRE_HOURS = 0;
+    private static final long EXPIRE_HOURS = 8;
     private static final long EXPIRE_MINUTES = 30;
 
     private JwtUtils () {}
@@ -89,7 +89,7 @@ public class JwtUtils {
         return token.contains(JWT_BEARER) ? token.substring(JWT_BEARER.length()) : token;
     }
 
-    /* Testar a validade do token */
+    /* Obter o subject do token */
     public static String getUsernameFromToken(String token) {
         return getClaimsFromToken(token).getSubject();
     }
