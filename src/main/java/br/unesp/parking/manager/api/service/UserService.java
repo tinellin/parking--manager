@@ -23,29 +23,28 @@ public class UserService {
     @Transactional
     public User save(User user) {
         try {
-            System.out.println("Usuário: " + user.getUsername());
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userRepository.save(user);
         } catch (DataIntegrityViolationException ex) {
-            throw new UsernameUniqueViolationException(String.format("User {%s} already registered.", user.getUsername()));
+            throw new UsernameUniqueViolationException(String.format("Usuário {%s} já registrado.", user.getUsername()));
         }
     }
 
     @Transactional(readOnly = true)
     public User getById(Long id) {
         return userRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException(String.format("User id=%s not found.", id))
+                () -> new EntityNotFoundException(String.format("Usuário com id=%s não encontrado.", id))
         );
     }
 
     @Transactional()
     public User updatePassword(Long id, String password, String newPassword, String confirmNewPassword) {
 
-        if (!newPassword.equals(confirmNewPassword)) throw new PasswordInvalidException("Incorrect new password.");
+        if (!newPassword.equals(confirmNewPassword)) throw new PasswordInvalidException("As senhas não são iguais.");
 
         User user = getById(id);
 
-        if(!passwordEncoder.matches(password, user.getPassword())) throw new PasswordInvalidException("Your password not confer.");
+        if(!passwordEncoder.matches(password, user.getPassword())) throw new PasswordInvalidException("Sua senha não confere.");
 
         user.setPassword(passwordEncoder.encode(password));
         return user;
@@ -59,7 +58,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(
-                () -> new EntityNotFoundException(String.format("User '%s' not found.", username))
+                () -> new EntityNotFoundException(String.format("Usuário '%s' não encontrado.", username))
         );
     }
     @Transactional(readOnly = true)

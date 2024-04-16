@@ -1,7 +1,7 @@
-package jwt;
+package br.unesp.parking.manager.api.jwt;
 
-import com.park.demoparkapi.entity.User;
-import com.park.demoparkapi.service.UserService;
+import br.unesp.parking.manager.api.entity.User;
+import br.unesp.parking.manager.api.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

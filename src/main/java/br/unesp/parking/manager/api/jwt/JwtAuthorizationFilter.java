@@ -1,4 +1,4 @@
-package jwt;
+package br.unesp.parking.manager.api.jwt;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

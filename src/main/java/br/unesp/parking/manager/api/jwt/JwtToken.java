@@ -1,4 +1,4 @@
-package jwt;
+package br.unesp.parking.manager.api.jwt;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

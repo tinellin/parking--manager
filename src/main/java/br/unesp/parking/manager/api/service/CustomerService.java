@@ -40,6 +40,11 @@ public class CustomerService {
     }
 
     @Transactional(readOnly = true)
+    public Customer findUserByIdAuthenticated(Long id) {
+        return customerRepo.findByUserId(id);
+    }
+
+    @Transactional(readOnly = true)
     public Page<CustomerProjection> findAll(Pageable pageable) {
         return customerRepo.findAllPageable(pageable);
     }

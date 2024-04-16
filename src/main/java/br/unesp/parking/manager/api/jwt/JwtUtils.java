@@ -1,4 +1,4 @@
-package jwt;
+package br.unesp.parking.manager.api.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
