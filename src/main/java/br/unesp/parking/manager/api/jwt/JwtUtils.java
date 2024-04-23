@@ -63,7 +63,7 @@ public class JwtUtils {
                     .build()
                     .parseSignedClaims(refactorToken(token)).getPayload();
         } catch (JwtException ex) {
-            log.error(String.format("Invalid token %s", ex.getMessage()));
+            log.error(String.format("Token inválido %s", ex.getMessage()));
         }
 
         return null;
@@ -78,7 +78,7 @@ public class JwtUtils {
                     .parseSignedClaims(refactorToken(token));
             return true;
         } catch (JwtException ex) {
-            log.error(String.format("Invalid token %s", ex.getMessage()));
+            log.error(String.format("Token inválido %s", ex.getMessage()));
         }
         
         return false;

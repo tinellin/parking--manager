@@ -2,6 +2,7 @@ package br.unesp.parking.manager.api.web.controller;
 
 import br.unesp.parking.manager.api.entity.CarInfo;
 import br.unesp.parking.manager.api.entity.Customer;
+import br.unesp.parking.manager.api.entity.User;
 import br.unesp.parking.manager.api.jwt.JwtUserDetails;
 import br.unesp.parking.manager.api.repository.projection.CustomerProjection;
 import br.unesp.parking.manager.api.service.CarInfoService;
@@ -16,8 +17,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("api/v1/customers")
@@ -55,15 +59,23 @@ public class CustomerController {
         return CustomerMapper.toDto(customer);
     }
 
-    @PostMapping("/car")
+
+    @PatchMapping("/balance/{value}") ResponseEntity<Void> addCredit(@AuthenticationPrincipal JwtUserDetails userDetails, @PathVariable BigDecimal value) {
+        Customer customer = customerService.findUserByIdAuthenticated(userDetails.getId());
+        customerService.addCredit(customer, value);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/cars")
     @ResponseStatus(HttpStatus.CREATED)
     public CarInfoResponseDto mapNewCar(@AuthenticationPrincipal JwtUserDetails user, @RequestBody @Valid CreateCarInfoDto dto) {
         Customer customer = customerService.findUserByIdAuthenticated(user.getId());
-        CarInfo carInfo = carInfoService.create(customer, CarInfoMapper.toCarInfo(dto));
+        CarInfo carInfo = carInfoService.createByCustomer(customer, CarInfoMapper.toCarInfo(dto));
         return CarInfoMapper.toDto(carInfo);
     }
 
-    @DeleteMapping("/car")
+    @DeleteMapping("/cars")
     public void deleteCar(@RequestParam(name = "id") String licensePlate) {
         carInfoService.delete(licensePlate);
     }

@@ -23,12 +23,12 @@ public class CarInfo {
     @Column(name = "car_color", nullable = false, length = 45)
     private String carColor;
 
+//    @OneToMany(mappedBy = "carInfo")
+//    private CustomerParkingSpot customerParkingSpot;
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-    @OneToOne(mappedBy = "carInfo")
-    private CustomerParkingSpot customerParkingSpot;
 
     @Override
     public String toString() {

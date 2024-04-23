@@ -30,22 +30,18 @@ public class CustomerParkingSpot {
     private String receipt;
 
     @Column(name = "value", columnDefinition = "decimal(7,2)")
-    private BigDecimal value;
+    private BigDecimal value = BigDecimal.ZERO;
 
     @Column(name = "discount", columnDefinition = "decimal(7,2)")
-    private BigDecimal discount;
+    private BigDecimal discount = BigDecimal.ZERO;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
+    @JoinColumn(name = "car_info_id", nullable = false)
+    private CarInfo carInfo;
 
     @ManyToOne
     @JoinColumn(name = "id_parking_spot", nullable = false)
     private ParkingSpot parkingSpot;
-
-    @OneToOne
-    @JoinColumn(name = "car_info_id", referencedColumnName = "id", nullable = false)
-    private CarInfo carInfo;
 
     @Override
     public boolean equals(Object o) {

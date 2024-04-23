@@ -17,11 +17,16 @@ public class Customer extends Person {
     private Long id;
 
     @Column(name = "balance", columnDefinition = "decimal(7,2)", nullable = false)
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
 
     @Column(name = "occupation", nullable = false, length = 100)
     private String occupation;
 
     @OneToMany(mappedBy = "customer")
     private List<CarInfo> car;
+
+
+    public void setBalance(BigDecimal balance) {
+        this.balance = this.balance.add(balance);
+    }
 }

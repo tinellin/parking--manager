@@ -42,4 +42,10 @@ public class ParkingSpotService {
     public List<ParkingSpot> findAll() {
         return parkingSpotRepo.findAll();
     }
+
+    @Transactional
+    public ParkingSpot getFreeParkingSpot() {
+        return parkingSpotRepo.findFirstByStatus(ParkingSpot.StatusParkingSpot.FREE)
+                .orElseThrow(() -> new EntityNotFoundException("Nenhuma vaga livre foi encontrada."));
+    }
 }

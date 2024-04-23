@@ -26,13 +26,13 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         System.out.println(token);
 
         if (token == null || !token.startsWith(JwtUtils.JWT_BEARER)) {
-            log.info("Token is null, blank or not initialized with 'Bearer '.");
+            log.info("Token é nulo, vazio ou não foi inicializado com 'Bearer '.");
             filterChain.doFilter(req, res); /* Devolver para os objetos req e res para o contexto da requisição */
             return;
         }
 
         if (!JwtUtils.isTokenValid(token)) {
-            log.warn("Token is invalid.");
+            log.warn("Token está inválido.");
             filterChain.doFilter(req, res);
             return;
         }
@@ -51,6 +51,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     private void toAuthentication(HttpServletRequest req, String username) {
         UserDetails userDetails = detailsService.loadUserByUsername(username);
 
+        /* Token interno gerenciado pelo próprio Spring Security */
         UsernamePasswordAuthenticationToken authToken = UsernamePasswordAuthenticationToken
                 .authenticated(userDetails, null, userDetails.getAuthorities());
 

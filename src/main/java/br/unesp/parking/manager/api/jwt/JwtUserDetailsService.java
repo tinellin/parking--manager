@@ -12,12 +12,14 @@ import org.springframework.stereotype.Service;
 public class JwtUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
+    /* Recuperar dados do usuário a partir do username */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userService.getByUsername(username);
         return new JwtUserDetails(user);
     }
 
+    /* Criar token JWT para a autenticação */
     public JwtToken getTokenAuthenticated(String username) {
         User.Role role = userService.getRoleById(username);
         return JwtUtils.createJwtToken(username, role.name().substring("ROLE_".length()));

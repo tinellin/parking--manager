@@ -57,4 +57,13 @@ public class ApiExceptionHandler {
                 .body(new ErrorMessage(req, HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
 
+    @ExceptionHandler(CustomerPaymentException.class)
+    public ResponseEntity<ErrorMessage> customerPaymentException(CustomerPaymentException ex, HttpServletRequest req) {
+        log.error("Api error - ", ex);
+
+        return ResponseEntity
+                .status(HttpStatus.PAYMENT_REQUIRED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessage(req, HttpStatus.PAYMENT_REQUIRED, ex.getMessage()));
+    }
 }
