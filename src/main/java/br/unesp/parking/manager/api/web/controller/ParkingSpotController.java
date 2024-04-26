@@ -8,6 +8,7 @@ import br.unesp.parking.manager.api.web.dto.mapper.ParkingSpotMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,6 +23,7 @@ public class ParkingSpotController {
     private final ParkingSpotService parkingSpotService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> create(@RequestBody @Valid ParkingSpotCreateDto dto) {
         ParkingSpot parkingSpot = ParkingSpotMapper.toParkingSpot(dto);
         parkingSpotService.save(parkingSpot);
@@ -36,11 +38,13 @@ public class ParkingSpotController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public List<ParkingSpot> getAll() {
         return parkingSpotService.findAll();
     }
 
     @GetMapping("/{code}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ParkingSpotResponseDto getByCode(@PathVariable String code) {
         return ParkingSpotMapper.toDto(parkingSpotService.findByCode(code));
     }

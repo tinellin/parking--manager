@@ -2,7 +2,7 @@ package br.unesp.parking.manager.api.service;
 
 import br.unesp.parking.manager.api.entity.CarInfo;
 import br.unesp.parking.manager.api.entity.Customer;
-import br.unesp.parking.manager.api.entity.CustomerParkingSpot;
+import br.unesp.parking.manager.api.entity.CarInfoParkingSpot;
 import br.unesp.parking.manager.api.entity.ParkingSpot;
 import br.unesp.parking.manager.api.exception.CustomerPaymentException;
 import br.unesp.parking.manager.api.utils.ParkingUtils;
@@ -16,39 +16,38 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class ParkingService {
-    private final CustomerParkingSpotService customerParkingSpotService;
-    private final CustomerService customerService;
+    private final CarInfoParkingSpotService carInfoParkingSpotService;
     private final ParkingSpotService parkingSpotService;
     private final CarInfoService carInfoService;
 
     @Transactional
-    public CustomerParkingSpot checkIn(CarInfo carInfo) {
-        CustomerParkingSpot customerParkingSpot = new CustomerParkingSpot();
+    public CarInfoParkingSpot checkIn(CarInfo carInfo) {
+        CarInfoParkingSpot carInfoParkingSpot = new CarInfoParkingSpot();
 
         /* Criar registro de carro, se não passou pelo estacionamento ainda */
         CarInfo createdCar = carInfoService.createByArrivalInParking(carInfo);
-        customerParkingSpot.setCarInfo(createdCar);
+        carInfoParkingSpot.setCarInfo(createdCar);
 
         /* Busca por uma vaga livre por um querie method que procura a primeira vaga livre */
         ParkingSpot parkingSpot = parkingSpotService.getFreeParkingSpot();
         parkingSpot.setStatus(ParkingSpot.StatusParkingSpot.OCCUPIED);
 
         /* Insere o objeto vaga, a data de entrada e o recibo (usando o gerador de recibo personalizado que criamos) */
-        customerParkingSpot.setParkingSpot(parkingSpot);
-        customerParkingSpot.setEntryDate(LocalDateTime.now());
-        customerParkingSpot.setReceipt(ParkingUtils.generateReceipt());
+        carInfoParkingSpot.setParkingSpot(parkingSpot);
+        carInfoParkingSpot.setEntryDate(LocalDateTime.now());
+        carInfoParkingSpot.setReceipt(ParkingUtils.generateReceipt());
 
-        System.out.println("Recibo: " + customerParkingSpot.getReceipt());
+        System.out.println("Recibo: " + carInfoParkingSpot.getReceipt());
 
-        return customerParkingSpotService.save(customerParkingSpot);
+        return carInfoParkingSpotService.save(carInfoParkingSpot);
     }
 
     @Transactional
-    public CustomerParkingSpot checkout(CarInfo carInfo) {
-        CustomerParkingSpot customerParkingSpot = customerParkingSpotService.findByCarInfo(carInfo.getLicensePlate());
-        Customer customer = customerParkingSpot.getCarInfo().getCustomer();
+    public CarInfoParkingSpot checkout(CarInfo carInfo) {
+        CarInfoParkingSpot carInfoParkingSpot = carInfoParkingSpotService.findByCarInfo(carInfo.getLicensePlate());
+        Customer customer = carInfoParkingSpot.getCarInfo().getCustomer();
 
-        if (customer == null && customerParkingSpot.getValue().equals(BigDecimal.ZERO)) {
+        if (customer == null && carInfoParkingSpot.getValue().equals(BigDecimal.ZERO)) {
             throw new CustomerPaymentException(
                     String.format("Cancela não liberada, pois a placa %s não realizou o pagamento do recibo.", carInfo.getLicensePlate())
             );
@@ -61,35 +60,35 @@ public class ParkingService {
                 );
             }
 
-            injectCheckoutData(customerParkingSpot);
+            injectCheckoutData(carInfoParkingSpot);
 
             /* Calcular e inserir desconto */
-            long totalOfTimes = customerParkingSpotService.getTotalTimesFullParking(customerParkingSpot.getCarInfo().getLicensePlate());
-            BigDecimal discount = ParkingUtils.calculateDiscount(customerParkingSpot.getValue(), totalOfTimes);
-            customerParkingSpot.setDiscount(discount);
+            long totalOfTimes = carInfoParkingSpotService.getTotalTimesFullParking(carInfoParkingSpot.getCarInfo().getLicensePlate());
+            BigDecimal discount = ParkingUtils.calculateDiscount(carInfoParkingSpot.getValue(), totalOfTimes);
+            carInfoParkingSpot.setDiscount(discount);
 
-            return customerParkingSpotService.save(customerParkingSpot);
+            carInfoParkingSpotService.save(carInfoParkingSpot);
         }
 
-        return null;
+        return carInfoParkingSpot;
     }
 
     @Transactional
-    public CustomerParkingSpot payReceipt(String receipt) {
-        CustomerParkingSpot customerParkingSpot = customerParkingSpotService.findByReceipt(receipt);
-        injectCheckoutData(customerParkingSpot);
+    public CarInfoParkingSpot payReceipt(String receipt) {
+        CarInfoParkingSpot carInfoParkingSpot = carInfoParkingSpotService.findByReceipt(receipt);
+        injectCheckoutData(carInfoParkingSpot);
 
-        return customerParkingSpotService.save(customerParkingSpot);
+        return carInfoParkingSpotService.save(carInfoParkingSpot);
     }
 
-    private void injectCheckoutData(CustomerParkingSpot customerParkingSpot) {
+    private void injectCheckoutData(CarInfoParkingSpot carInfoParkingSpot) {
         LocalDateTime endDate = LocalDateTime.now();
 
         /* Calcular custo total do estacionamento */
-        BigDecimal value = ParkingUtils.calculateCost(customerParkingSpot.getEntryDate(), endDate);
+        BigDecimal value = ParkingUtils.calculateCost(carInfoParkingSpot.getEntryDate(), endDate);
 
-        customerParkingSpot.setEndDate(endDate);
-        customerParkingSpot.setValue(value);
-        customerParkingSpot.getParkingSpot().setStatus(ParkingSpot.StatusParkingSpot.FREE);
+        carInfoParkingSpot.setEndDate(endDate);
+        carInfoParkingSpot.setValue(value);
+        carInfoParkingSpot.getParkingSpot().setStatus(ParkingSpot.StatusParkingSpot.FREE);
     }
 }

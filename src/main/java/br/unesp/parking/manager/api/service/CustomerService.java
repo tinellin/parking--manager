@@ -58,7 +58,7 @@ public class CustomerService {
 
     @Transactional
     public void addCredit(Customer customer, BigDecimal value) {
-        customer.setBalance(value);
+        customer.setBalance(value.multiply(BigDecimal.valueOf(1.05)));
         customerRepo.save(customer);
     }
 }

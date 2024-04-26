@@ -10,6 +10,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,18 +28,21 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAll() {
         List<User> users = userService.getAll();
         return ResponseEntity.ok(UserMapper.toListDto(users));
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN') OR ( hasRole('CLIENT') AND #id == authentication.principal.id )")
     public ResponseEntity<UserResponseDto> getById(@PathVariable() Long id) {
         User user = userService.getById((id));
         return ResponseEntity.ok(UserMapper.toDto(user));
     }
 
     @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CLIENT') AND ( #id == authentication.principal.id )")
     public ResponseEntity<Void> updatePassword(@PathVariable() Long id, @Valid @RequestBody() UserPasswordDto dto) {
         userService.updatePassword(id, dto.getPassword(), dto.getNewPassword(), dto.getConfirmNewPassword());
         return ResponseEntity.noContent().build();

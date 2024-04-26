@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public interface CustomerParkingSpotProjection {
+public interface CarInfoParkingSpotProjection {
     String getLicensePlate();
     String getCarBrand();
     String getCarModel();

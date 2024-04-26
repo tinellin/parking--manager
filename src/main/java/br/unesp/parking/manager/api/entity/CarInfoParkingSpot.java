@@ -2,10 +2,6 @@ package br.unesp.parking.manager.api.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
@@ -16,7 +12,7 @@ import java.util.Objects;
 @Table(name = "customer_has_parking_spot")
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public class CustomerParkingSpot {
+public class CarInfoParkingSpot {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -47,7 +43,7 @@ public class CustomerParkingSpot {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CustomerParkingSpot that = (CustomerParkingSpot) o;
+        CarInfoParkingSpot that = (CarInfoParkingSpot) o;
         return Objects.equals(id, that.id);
     }
 

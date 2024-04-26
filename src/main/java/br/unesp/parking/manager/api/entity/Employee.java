@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "employees")
 @EntityListeners(AuditingEntityListener.class)
