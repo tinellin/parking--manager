@@ -1,5 +1,8 @@
 package br.unesp.parking.manager.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -23,11 +26,9 @@ public class CarInfo {
     @Column(name = "car_color", nullable = false, length = 45)
     private String carColor;
 
-//    @OneToMany(mappedBy = "carInfo")
-//    private CustomerParkingSpot customerParkingSpot;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
+    @JsonIgnore
     private Customer customer;
 
     @Override

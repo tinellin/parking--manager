@@ -12,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,5 +53,9 @@ public class CarInfoService {
         CarInfo carInfo = carInfoRepo.findByLicensePlate(licensePlate.toUpperCase())
                 .orElseThrow(() -> new EntityNotFoundException(String.format("O carro com placa=%s não existe no sistema.", licensePlate)));
         carInfoRepo.delete(carInfo);
+    }
+
+    public List<CarInfo> getCustomerCars(Customer customer) {
+        return carInfoRepo.findByCustomerId(customer.getId());
     }
 }

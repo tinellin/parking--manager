@@ -1,6 +1,7 @@
 package br.unesp.parking.manager.api.web.controller;
 
 import br.unesp.parking.manager.api.entity.User;
+import br.unesp.parking.manager.api.jwt.JwtUserDetails;
 import br.unesp.parking.manager.api.service.UserService;
 import br.unesp.parking.manager.api.web.dto.UserCreateDto;
 import br.unesp.parking.manager.api.web.dto.UserPasswordDto;
@@ -11,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +27,12 @@ public class UserController {
     public ResponseEntity<UserResponseDto> create(@Valid @RequestBody() UserCreateDto createDto) {
         User response = userService.save(UserMapper.toUser(createDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDto(response));
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<UserResponseDto> getUserDetails(@AuthenticationPrincipal JwtUserDetails user) {
+        User response = userService.getById(user.getId());
+        return ResponseEntity.ok(UserMapper.toDto(response));
     }
 
     @GetMapping

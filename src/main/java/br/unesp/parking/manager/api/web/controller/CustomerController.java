@@ -2,7 +2,6 @@ package br.unesp.parking.manager.api.web.controller;
 
 import br.unesp.parking.manager.api.entity.CarInfo;
 import br.unesp.parking.manager.api.entity.Customer;
-import br.unesp.parking.manager.api.entity.User;
 import br.unesp.parking.manager.api.jwt.JwtUserDetails;
 import br.unesp.parking.manager.api.repository.projection.CustomerProjection;
 import br.unesp.parking.manager.api.service.CarInfoService;
@@ -23,6 +22,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/customers")
@@ -64,8 +64,6 @@ public class CustomerController {
         return CustomerMapper.toDto(customer);
     }
 
-
-
     @PatchMapping("/balance/{value}")
     @PreAuthorize("hasRole('CLIENT')")
     ResponseEntity<Void> addCredit(@AuthenticationPrincipal JwtUserDetails userDetails, @PathVariable BigDecimal value) {
@@ -82,6 +80,14 @@ public class CustomerController {
         Customer customer = customerService.findUserByIdAuthenticated(user.getId());
         CarInfo carInfo = carInfoService.createByCustomer(customer, CarInfoMapper.toCarInfo(dto));
         return CarInfoMapper.toDto(carInfo);
+    }
+
+    @GetMapping("/cars")
+    @PreAuthorize("hasRole('CLIENT')")
+    public List<CarInfoResponseDto> getAllCars(@AuthenticationPrincipal JwtUserDetails user) {
+        Customer customer = customerService.findUserByIdAuthenticated(user.getId());
+        List<CarInfo> cars = carInfoService.getCustomerCars(customer);
+        return cars.stream().map(CarInfoMapper::toDto).toList();
     }
 
     @DeleteMapping("/cars")

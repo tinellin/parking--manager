@@ -1,5 +1,6 @@
 package br.unesp.parking.manager.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,10 +24,6 @@ public class Customer extends Person {
 
     @Column(name = "occupation", nullable = false, length = 100)
     private String occupation;
-
-    @OneToMany(mappedBy = "customer")
-    private List<CarInfo> car;
-
 
     public void setBalance(BigDecimal balance) {
         this.balance = this.balance.add(balance);
