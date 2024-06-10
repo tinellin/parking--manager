@@ -4,11 +4,8 @@ import br.unesp.parking.manager.api.entity.Employee;
 import br.unesp.parking.manager.api.exception.CpfUniqueViolationException;
 import br.unesp.parking.manager.api.exception.EntityNotFoundException;
 import br.unesp.parking.manager.api.repository.EmployeeRepository;
-import br.unesp.parking.manager.api.repository.projection.EmployeeProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +29,8 @@ public class EmployeeService {
     }
 
     @Transactional(readOnly = true)
-    public Page<EmployeeProjection> findAll(Pageable pageable) {
-        return employeeRepo.findAllPageable(pageable);
+    public List<Employee> findAll() {
+        return employeeRepo.findAll();
     }
 
     @Transactional(readOnly = true)

@@ -30,9 +30,9 @@ public class Employee extends Person {
     private String role;
 
     @Column(name = "entry_time", nullable = false)
-    private LocalTime entryTime;
+    private String entryTime;
 
     @Column(name = "departure_time", nullable = false)
-    private LocalTime departureTime;
+    private String departureTime;
 
 }

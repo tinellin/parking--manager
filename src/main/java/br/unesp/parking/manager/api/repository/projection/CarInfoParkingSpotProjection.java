@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public interface CarInfoParkingSpotProjection {
-    String getLicensePlate();
-    String getCarBrand();
-    String getCarModel();
-    String getCarColor();
+    String getCarInfoLicensePlate();
+    String getCarInfoCarBrand();
+    String getCarInfoCarModel();
+    String getCarInfoCarColor();
     String getCustomerCpf();
     String getReceipt();
     @JsonFormat(pattern = "YYYY-MM-DD hh:mm:ss")

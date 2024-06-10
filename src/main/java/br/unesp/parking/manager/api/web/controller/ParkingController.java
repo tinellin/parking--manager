@@ -2,14 +2,19 @@ package br.unesp.parking.manager.api.web.controller;
 
 import br.unesp.parking.manager.api.entity.CarInfo;
 import br.unesp.parking.manager.api.entity.CarInfoParkingSpot;
+import br.unesp.parking.manager.api.repository.projection.CarInfoParkingSpotProjection;
 import br.unesp.parking.manager.api.service.CarInfoParkingSpotService;
 import br.unesp.parking.manager.api.service.ParkingService;
 import br.unesp.parking.manager.api.web.dto.CreateCarInfoDto;
+import br.unesp.parking.manager.api.web.dto.PageableDto;
 import br.unesp.parking.manager.api.web.dto.ParkingResponseDto;
 import br.unesp.parking.manager.api.web.dto.mapper.CarInfoMapper;
 import br.unesp.parking.manager.api.web.dto.mapper.CustomerParkingSpotMapper;
+import br.unesp.parking.manager.api.web.dto.mapper.PageableMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -63,5 +68,12 @@ public class ParkingController {
         CarInfoParkingSpot carInfoParkingSpot = parkingService.checkout(carInfo);
 
         return CustomerParkingSpotMapper.toDto(carInfoParkingSpot);
+    }
+
+    @GetMapping()
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public PageableDto getAllParking(Pageable pageable) {
+        Page<CarInfoParkingSpotProjection> parkings = carInfoParkingSpotService.findAllCarInfoParkingSpots(pageable);
+        return PageableMapper.toDto(parkings);
     }
 }

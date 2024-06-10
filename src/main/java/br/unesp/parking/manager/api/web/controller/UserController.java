@@ -55,6 +55,5 @@ public class UserController {
         userService.updatePassword(id, dto.getPassword(), dto.getNewPassword(), dto.getConfirmNewPassword());
         return ResponseEntity.noContent().build();
     }
-
 }
 

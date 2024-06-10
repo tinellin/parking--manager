@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    @Query("select c from Customer c")
+    @Query("SELECT c.id AS id, c.name AS name, c.birthday AS birthday, c.cpf AS cpf, c.balance AS balance, c.occupation AS occupation, c.user.id AS userId, c.user.username AS username, c.user.role AS role FROM Customer c")
     Page<CustomerProjection> findAllPageable(Pageable pageable);
 
     Customer findByUserId(Long id);

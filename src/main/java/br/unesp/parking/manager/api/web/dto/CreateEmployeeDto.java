@@ -29,9 +29,9 @@ public class CreateEmployeeDto {
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime entryDate;
+    private String entryTime;
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
-    private LocalTime departureTime;
+    private String departureTime;
 }
