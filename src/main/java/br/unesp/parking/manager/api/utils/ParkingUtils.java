@@ -11,9 +11,9 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParkingUtils {
     private static final double FIRST_15_MINUTES = 5.00;
-    private static final double FIRST_60_MINUTES = 9.50;
-    private static final double ADD_15_MINUTES = 1.25;
-    private static final double DISCOUNT = 2.30;
+    private static final double FIRST_60_MINUTES = 9.25;
+    private static final double ADD_15_MINUTES = 1.75;
+    private static final double DISCOUNT = 0.30;
 
     public static BigDecimal calculateCost(LocalDateTime entry, LocalDateTime end) {
         long minutes = entry.until(end, ChronoUnit.MINUTES);

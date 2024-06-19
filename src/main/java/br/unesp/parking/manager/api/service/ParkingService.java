@@ -66,7 +66,7 @@ public class ParkingService {
             long totalOfTimes = carInfoParkingSpotService.getTotalTimesFullParking(carInfoParkingSpot.getCarInfo().getLicensePlate());
             BigDecimal discount = ParkingUtils.calculateDiscount(carInfoParkingSpot.getValue(), totalOfTimes);
             carInfoParkingSpot.setDiscount(discount);
-            customer.setBalance(customer.getBalance().subtract(carInfoParkingSpot.getValue().subtract(discount)));
+            customer.subtractBalance(carInfoParkingSpot.getValue().subtract(discount));
 
             carInfoParkingSpotService.save(carInfoParkingSpot);
         }

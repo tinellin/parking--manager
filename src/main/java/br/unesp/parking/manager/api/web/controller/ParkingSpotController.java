@@ -1,12 +1,18 @@
 package br.unesp.parking.manager.api.web.controller;
 
 import br.unesp.parking.manager.api.entity.ParkingSpot;
+import br.unesp.parking.manager.api.repository.projection.CustomerProjection;
+import br.unesp.parking.manager.api.repository.projection.ParkingSpotProjection;
 import br.unesp.parking.manager.api.service.ParkingSpotService;
+import br.unesp.parking.manager.api.web.dto.PageableDto;
 import br.unesp.parking.manager.api.web.dto.ParkingSpotCreateDto;
 import br.unesp.parking.manager.api.web.dto.ParkingSpotResponseDto;
+import br.unesp.parking.manager.api.web.dto.mapper.PageableMapper;
 import br.unesp.parking.manager.api.web.dto.mapper.ParkingSpotMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +43,11 @@ public class ParkingSpotController {
         return ResponseEntity.created(location).build();
     }
 
-    @GetMapping
+    @GetMapping()
     @PreAuthorize("hasRole('ADMIN')")
-    public List<ParkingSpot> getAll() {
-        return parkingSpotService.findAll();
+    public PageableDto getAll(Pageable pageable) {
+        Page<ParkingSpotProjection> parkingSpots = parkingSpotService.findAll(pageable);
+        return PageableMapper.toDto(parkingSpots);
     }
 
     @GetMapping("/{code}")

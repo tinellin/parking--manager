@@ -12,7 +12,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "customers")
-@EntityListeners(AuditingEntityListener.class)
 @DiscriminatorValue("customer")
 @Data
 public class Customer extends Person {
@@ -27,5 +26,9 @@ public class Customer extends Person {
 
     public void setBalance(BigDecimal balance) {
         this.balance = this.balance.add(balance);
+    }
+
+    public void subtractBalance(BigDecimal balance) {
+        this.balance = this.balance.subtract(balance);
     }
 }

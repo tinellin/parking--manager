@@ -8,7 +8,6 @@ import java.time.LocalDate;
 public interface CustomerProjection {
     Long getId();
     String getName();
-    // LocalDate getBirthday();
     String getCpf();
     String getOccupation();
     String getUsername();

@@ -4,13 +4,15 @@ import br.unesp.parking.manager.api.entity.ParkingSpot;
 import br.unesp.parking.manager.api.exception.CodeUniqueViolationException;
 import br.unesp.parking.manager.api.exception.EntityNotFoundException;
 import br.unesp.parking.manager.api.repository.ParkingSpotRepository;
+import br.unesp.parking.manager.api.repository.projection.ParkingSpotProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 @Service
@@ -39,8 +41,8 @@ public class ParkingSpotService {
     }
 
     @Transactional(readOnly = true)
-    public List<ParkingSpot> findAll() {
-        return parkingSpotRepo.findAll();
+    public Page<ParkingSpotProjection> findAll(Pageable pageable) {
+        return parkingSpotRepo.findAllPageable(pageable);
     }
 
     @Transactional
